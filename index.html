@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bens BoerderEi — Verse scharreleieren uit Haps</title>
+  <meta name="description" content="Verse scharreleieren rechtstreeks van Bens BoerderEi in Haps. 24/7 beschikbaar via ons eierlokaal aan de Beerseweg. Duurzaam, gecertificeerd, en heerlijk vers.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#15803D',
+            'primary-dark': '#14532D',
+            'primary-light': '#22C55E',
+            cta: '#CA8A04',
+            'cta-hover': '#A16207',
+            bg: '#F0FDF4',
+            'bg-warm': '#FEFCE8',
+            brown: '#8B4513',
+            sky: '#87CEEB',
+            cream: '#F5F5DC',
+          },
+          fontFamily: {
+            serif: ['Lora', 'serif'],
+            sans: ['Raleway', 'sans-serif'],
+          },
+          borderRadius: {
+            'organic': '24px',
+            'organic-sm': '16px',
+          },
+          boxShadow: {
+            'soft': '0 8px 32px rgba(0,0,0,0.08)',
+            'natural': '0 4px 16px rgba(21,128,61,0.12)',
+          },
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-primary: #15803D;
+      --color-secondary: #22C55E;
+      --color-cta: #CA8A04;
+      --color-background: #F0FDF4;
+      --color-text: #14532D;
+      --organic-radius: 24px;
+      --shadow-soft: 0 8px 32px rgba(0,0,0,0.08);
+    }
+
+    body { font-family: 'Raleway', sans-serif; background: var(--color-background); color: var(--color-text); }
+    h1, h2, h3, h4 { font-family: 'Lora', serif; }
+
+    /* Organic blob SVG backgrounds */
+    .blob-bg {
+      position: relative;
+      overflow: hidden;
+    }
+    .blob-bg::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 300px; height: 300px;
+      background: rgba(34,197,94,0.08);
+      border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%;
+      z-index: 0;
+    }
+
+    /* Texture grain overlay */
+    .grain::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 1;
+    }
+
+    /* Hero parallax */
+    .hero-section {
+      background: linear-gradient(135deg, #14532D 0%, #15803D 50%, #166534 100%);
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* Smooth scrolling */
+    html { scroll-behavior: smooth; }
+
+    /* Nav */
+    .nav-link { 
+      font-family: 'Raleway', sans-serif; 
+      font-weight: 500;
+      transition: color 200ms ease;
+    }
+    .nav-link:hover { color: #CA8A04; }
+
+    /* Cards */
+    .card-organic {
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      transition: transform 200ms ease, box-shadow 200ms ease;
+    }
+    .card-organic:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(21,128,61,0.15);
+    }
+
+    /* Video wrapper responsive */
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 16px;
+    }
+    .video-wrapper iframe, .video-wrapper video {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    /* Lightbox */
+    #lightbox {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 16px;
+      object-fit: contain;
+    }
+    #lightbox-close {
+      position: absolute; top: 20px; right: 28px;
+      color: white; font-size: 2rem; cursor: pointer;
+      background: none; border: none;
+      font-family: 'Lora', serif;
+    }
+
+    /* Stats pulse animation */
+    @keyframes pulse-soft {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+    .stat-number { animation: pulse-soft 3s ease-in-out infinite; display: inline-block; }
+
+    /* Hamburger */
+    #mobile-menu { display: none; }
+    #mobile-menu.open { display: block; }
+
+    /* Scroll reveal */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .card-organic, .stat-number { animation: none; transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <!-- Logo -->
+      <a href="index.html" class="flex items-center gap-2 cursor-pointer">
+        <span class="font-serif font-bold text-xl text-primary">Bens BoerderEi</span>
+        <span class="text-xs text-primary-light font-sans font-semibold bg-green-100 px-2 py-0.5 rounded-full">⭐ 4.9</span>
+      </a>
+
+      <!-- Desktop nav -->
+      <div class="hidden md:flex items-center gap-6">
+        <a href="#boerderij" class="nav-link text-primary-dark">De boerderij</a>
+        <a href="#eierlokaal" class="nav-link text-primary-dark">Eierlokaal</a>
+        <a href="#duurzaamheid" class="nav-link text-primary-dark">Duurzaamheid</a>
+        <a href="#videos" class="nav-link text-primary-dark">Films</a>
+        <a href="#contact" class="nav-link text-primary-dark">Contact</a>
+        <a href="#eierlokaal" class="bg-cta text-white px-4 py-2 rounded-organic-sm font-semibold hover:bg-cta-hover transition-colors duration-200 cursor-pointer">
+          Koop eieren
+        </a>
+      </div>
+
+      <!-- Hamburger -->
+      <button id="hamburger" class="md:hidden cursor-pointer p-2 rounded-organic-sm text-primary" aria-label="Menu openen">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="md:hidden pb-4">
+      <div class="flex flex-col gap-2 pt-2 border-t border-green-100">
+        <a href="#boerderij" class="nav-link text-primary-dark py-2 px-2 rounded-lg hover:bg-green-50">De boerderij</a>
+        <a href="#eierlokaal" class="nav-link text-primary-dark py-2 px-2 rounded-lg hover:bg-green-50">Eierlokaal</a>
+        <a href="#duurzaamheid" class="nav-link text-primary-dark py-2 px-2 rounded-lg hover:bg-green-50">Duurzaamheid</a>
+        <a href="#videos" class="nav-link text-primary-dark py-2 px-2 rounded-lg hover:bg-green-50">Films</a>
+        <a href="#contact" class="nav-link text-primary-dark py-2 px-2 rounded-lg hover:bg-green-50">Contact</a>
+        <a href="#eierlokaal" class="bg-cta text-white px-4 py-2 rounded-organic-sm font-semibold text-center mt-2 cursor-pointer">Koop eieren</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero-section flex items-center justify-center text-white grain">
+  <!-- Organic SVG blob decorations -->
+  <svg class="absolute top-20 left-0 opacity-10 w-96 h-96" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M200 50 C280 30 370 100 380 200 C390 300 320 380 220 370 C120 360 30 290 20 190 C10 90 120 70 200 50Z" fill="#22C55E"/>
+  </svg>
+  <svg class="absolute bottom-10 right-0 opacity-10 w-80 h-80" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M180 40 C280 20 400 100 390 220 C380 340 280 400 160 380 C40 360 -20 260 10 160 C40 60 80 60 180 40Z" fill="#CA8A04"/>
+  </svg>
+
+  <div class="relative z-10 text-center max-w-4xl mx-auto px-4 sm:px-6 py-32 pt-40">
+    <!-- Badge -->
+    <span class="inline-block bg-cta/20 border border-cta/40 text-yellow-200 text-sm font-semibold px-4 py-1.5 rounded-full mb-6 font-sans">
+      🥚 Scharreleieren rechtstreeks van de boerderij
+    </span>
+
+    <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+      Scharreleieren van Bens,<br>
+      <span class="text-yellow-300">dat is wat ik wens!</span>
+    </h1>
+
+    <p class="font-sans text-lg sm:text-xl text-green-100 max-w-2xl mx-auto mb-10 font-light leading-relaxed">
+      Verse scharreleieren 24/7 beschikbaar via ons eierlokaal aan de Beerseweg in Haps. 
+      Eerlijk, duurzaam en heerlijk vers — rechtstreeks van de boer.
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+      <a href="#eierlokaal" class="bg-cta hover:bg-cta-hover text-white font-semibold px-8 py-4 rounded-organic transition-colors duration-200 cursor-pointer text-lg w-full sm:w-auto text-center">
+        Bezoek ons eierlokaal
+      </a>
+      <a href="#videos" class="border-2 border-white/40 text-white hover:bg-white/10 font-semibold px-8 py-4 rounded-organic transition-colors duration-200 cursor-pointer text-lg w-full sm:w-auto text-center">
+        Bekijk de film
+      </a>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="mt-16 animate-bounce">
+      <svg class="w-6 h-6 mx-auto text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATS BALK ===== -->
+<section class="bg-white py-10 px-4 shadow-sm">
+  <div class="max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+    <div class="flex flex-col items-center gap-1">
+      <span class="stat-number font-serif text-3xl font-bold text-primary">4.9 ⭐</span>
+      <span class="font-sans text-sm text-green-700">Google beoordelingen</span>
+    </div>
+    <div class="flex flex-col items-center gap-1">
+      <span class="stat-number font-serif text-3xl font-bold text-primary">24/7</span>
+      <span class="font-sans text-sm text-green-700">Eierlokaal open</span>
+    </div>
+    <div class="flex flex-col items-center gap-1">
+      <span class="stat-number font-serif text-3xl font-bold text-primary">3x</span>
+      <span class="font-sans text-sm text-green-700">Gecertificeerd (IKB, KAT, VLOG)</span>
+    </div>
+    <div class="flex flex-col items-center gap-1">
+      <span class="stat-number font-serif text-3xl font-bold text-primary">100%</span>
+      <span class="font-sans text-sm text-green-700">Duurzame stroom</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== OVER DE BOERDERIJ ===== -->
+<section id="boerderij" class="py-20 px-4 sm:px-6 bg-bg blob-bg">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-14 reveal">
+      <span class="font-sans text-sm font-semibold text-cta uppercase tracking-widest">De boerderij</span>
+      <h2 class="font-serif text-3xl sm:text-4xl font-bold text-primary-dark mt-2">Bens BoerderEi in Haps</h2>
+      <p class="font-sans text-green-700 mt-4 max-w-2xl mx-auto leading-relaxed">
+        Van nature leeft een kip aan de rand van het bos. Op onze boerderij hebben wij gekozen voor een volièresysteem dat op deze theorie berust — met ruimte om te scharrelen, stofbaden en rustig een eitje te leggen.
+      </p>
+    </div>
+
+    <!-- Hoofdvideo -->
+    <div class="max-w-4xl mx-auto mb-14 reveal">
+      <div class="video-wrapper shadow-xl">
+        <iframe title="Legpluimveebedrijf Bens BoerderEi in Haps" 
+          src="https://www.youtube.com/embed/Vzz1ww0rN4Y" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+
+    <!-- Feature cards -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="card-organic bg-white p-6 reveal">
+        <div class="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+          </svg>
+        </div>
+        <h3 class="font-serif text-lg font-semibold text-primary-dark mb-2">Volièresysteem</h3>
+        <p class="font-sans text-green-700 text-sm leading-relaxed">De hennen kunnen scharrelen langs de randen (de rand van het bos), met leefplateaus voor voer, water en legnesten.</p>
+      </div>
+
+      <div class="card-organic bg-white p-6 reveal">
+        <div class="w-12 h-12 bg-yellow-100 rounded-2xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+          </svg>
+        </div>
+        <h3 class="font-serif text-lg font-semibold text-primary-dark mb-2">Dag & Nacht ritme</h3>
+        <p class="font-sans text-green-700 text-sm leading-relaxed">Onze scharrelhennen leven met het natuurlijke dag/nacht ritme. 's Ochtends zijn ze er als de kippen bij, 's avonds slapen ze op zitstokken.</p>
+      </div>
+
+      <div class="card-organic bg-white p-6 reveal">
+        <div class="w-12 h-12 bg-sky-100 rounded-2xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+          </svg>
+        </div>
+        <h3 class="font-serif text-lg font-semibold text-primary-dark mb-2">Dierenwelzijn voorop</h3>
+        <p class="font-sans text-green-700 text-sm leading-relaxed">Pikstenen vol vitamines, beschutte legnesten met zachte matjes, en dagelijks een mix van luzerne en maïs in de scharrelruimte.</p>
+      </div>
+
+      <div class="card-organic bg-white p-6 reveal">
+        <div class="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+        </div>
+        <h3 class="font-serif text-lg font-semibold text-primary-dark mb-2">Gecertificeerd</h3>
+        <p class="font-sans text-green-700 text-sm leading-relaxed">IKB-EI, KAT en VLOG gecertificeerd. Volledig traceerbaar via de ei-code op elk ei.</p>
+      </div>
+
+      <div class="card-organic bg-white p-6 reveal">
+        <div class="w-12 h-12 bg-yellow-100 rounded-2xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+          </svg>
+        </div>
+        <h3 class="font-serif text-lg font-semibold text-primary-dark mb-2">Boerderij Educatie</h3>
+        <p class="font-sans text-green-700 text-sm leading-relaxed">Scholen en groepen zijn welkom voor een educatief bezoek aan de boerderij. Leer alles over kippen, eieren en de keten.</p>
+      </div>
+
+      <div class="card-organic bg-white p-6 reveal">
+        <div class="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </div>
+        <h3 class="font-serif text-lg font-semibold text-primary-dark mb-2">Voedselbank</h3>
+        <p class="font-sans text-green-700 text-sm leading-relaxed">Wij doneren eieren aan de voedselbank, omdat iedereen een lekker vers eitje verdient.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EIERLOKAAL ===== -->
+<section id="eierlokaal" class="py-20 px-4 sm:px-6 bg-white">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <div class="reveal">
+        <span class="font-sans text-sm font-semibold text-cta uppercase tracking-widest">Eierlokaal</span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-primary-dark mt-2 mb-6">
+          Verse eieren 24/7 aan de Beerseweg
+        </h2>
+        <p class="font-sans text-green-700 leading-relaxed mb-6">
+          Wij verkopen onze eieren aan de weg. Verser vindt u ze niet! Via ons eierlokaal (eierautomaat) kunt u 6 of 12 eieren kiezen — betaalbaar met pin of muntgeld.
+        </p>
+
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start gap-3">
+            <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+              </svg>
+            </div>
+            <p class="font-sans text-green-700 text-sm">Kies uit 6 of 12 eieren per verpakking</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+              </svg>
+            </div>
+            <p class="font-sans text-green-700 text-sm">Betalen met pin (kleine eieren) of muntgeld</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+              </svg>
+            </div>
+            <p class="font-sans text-green-700 text-sm">Altijd bijgevuld en schoon — 24/7 beschikbaar</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+              </svg>
+            </div>
+            <p class="font-sans text-green-700 text-sm">Dubbeldooiers regelmatig beschikbaar — een aanrader!</p>
+          </div>
+        </div>
+
+        <a href="#contact" class="inline-block bg-cta hover:bg-cta-hover text-white font-semibold px-6 py-3 rounded-organic-sm transition-colors duration-200 cursor-pointer">
+          Routebeschrijving
+        </a>
+      </div>
+
+      <!-- Foto grid automaat -->
+      <div class="grid grid-cols-2 gap-4 reveal">
+        <img src="images/automaat-1.jpg" alt="Het eierlokaal van Bens BoerderEi" class="rounded-organic object-cover w-full h-48 cursor-pointer hover:opacity-90 transition-opacity" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+        <img src="images/automaat-2.jpg" alt="Eierautomaat aan de Beerseweg" class="rounded-organic object-cover w-full h-48 cursor-pointer hover:opacity-90 transition-opacity" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+        <img src="images/google/google_place_1.jpg" alt="Bens BoerderEi eierlokaal" class="rounded-organic object-cover w-full h-48 cursor-pointer hover:opacity-90 transition-opacity" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+        <img src="images/google/google_place_2.jpg" alt="Verse eieren van de boerderij" class="rounded-organic object-cover w-full h-48 cursor-pointer hover:opacity-90 transition-opacity" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DUURZAAMHEID ===== -->
+<section id="duurzaamheid" class="py-20 px-4 sm:px-6 bg-bg">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-14 reveal">
+      <span class="font-sans text-sm font-semibold text-cta uppercase tracking-widest">Duurzaamheid</span>
+      <h2 class="font-serif text-3xl sm:text-4xl font-bold text-primary-dark mt-2">Omdat er na vandaag een morgen is</h2>
+      <p class="font-sans text-green-700 mt-4 max-w-2xl mx-auto leading-relaxed">
+        Bens BoerderEi won de Agroscoopbokaal als meest omgevingsbewuste legpluimveehouder. 
+        Duurzaamheid zit in ons DNA.
+      </p>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-12 items-center mb-14">
+      <div class="reveal">
+        <div class="video-wrapper shadow-xl">
+          <iframe title="Bens BoerderEi wint Agroscoopbokaal meest omgevingsbewuste legpluimveehouder" 
+            src="https://www.youtube.com/embed/Rc3DAgz3p5o" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen
+            loading="lazy">
+          </iframe>
+        </div>
+      </div>
+
+      <div class="space-y-6 reveal">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 bg-yellow-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-serif font-semibold text-primary-dark">Zonne-energie</h3>
+            <p class="font-sans text-green-700 text-sm mt-1">Wij wekken onze eigen duurzame stroom op via zonnepanelen.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-serif font-semibold text-primary-dark">Cradle to Cradle</h3>
+            <p class="font-sans text-green-700 text-sm mt-1">Circulariteit door en door — van kippenvoer tot mestverwerking.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 bg-sky-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-serif font-semibold text-primary-dark">Boert Bewust keurmerk</h3>
+            <p class="font-sans text-green-700 text-sm mt-1">Erkend als bewuste ondernemer in de Nederlandse landbouw.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-serif font-semibold text-primary-dark">Agroscoopbokaal winnaar</h3>
+            <p class="font-sans text-green-700 text-sm mt-1">Meest omgevingsbewuste legpluimveehouder van Nederland.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Yvon Jaspers foto -->
+    <div class="max-w-lg mx-auto text-center reveal">
+      <img src="images/yvon-jaspers.jpeg" alt="Bens BoerderEi wint prijs meest omgevingsbewuste legpluimveehouder" class="rounded-organic shadow-soft w-full object-cover max-h-80 cursor-pointer hover:opacity-90 transition-opacity" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- ===== REVIEWS ===== -->
+<section class="py-16 px-4 sm:px-6 bg-white">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-10 reveal">
+      <span class="font-sans text-sm font-semibold text-cta uppercase tracking-widest">Wat klanten zeggen</span>
+      <h2 class="font-serif text-3xl font-bold text-primary-dark mt-2">⭐ 4.9 op Google</h2>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="card-organic bg-bg p-6 reveal">
+        <div class="flex gap-1 mb-3">⭐⭐⭐⭐⭐</div>
+        <p class="font-sans text-green-800 text-sm italic leading-relaxed mb-4">"Mooie nieuwe automaat. Is ook altijd keurig bijgevuld en schoon."</p>
+        <span class="font-sans text-xs font-semibold text-primary">Harald Van Bergen</span>
+      </div>
+      <div class="card-organic bg-bg p-6 reveal">
+        <div class="flex gap-1 mb-3">⭐⭐⭐⭐⭐</div>
+        <p class="font-sans text-green-800 text-sm italic leading-relaxed mb-4">"Altijd heerlijke eieren voor een mooie prijs! Altijd vers! Zeker de dubbeldooier is een aanrader."</p>
+        <span class="font-sans text-xs font-semibold text-primary">Kees Cornelissen</span>
+      </div>
+      <div class="card-organic bg-bg p-6 reveal">
+        <div class="flex gap-1 mb-3">⭐⭐⭐⭐⭐</div>
+        <p class="font-sans text-green-800 text-sm italic leading-relaxed mb-4">"Handig, kunt kiezen 6 of 12 of nog meer eieren in 1 keer."</p>
+        <span class="font-sans text-xs font-semibold text-primary">Sonja Vermeulen</span>
+      </div>
+      <div class="card-organic bg-bg p-6 reveal">
+        <div class="flex gap-1 mb-3">⭐⭐⭐⭐</div>
+        <p class="font-sans text-green-800 text-sm italic leading-relaxed mb-4">"Heerlijke verse eieren voor een leuk prijsje."</p>
+        <span class="font-sans text-xs font-semibold text-primary">Inge Lieskamp</span>
+      </div>
+      <div class="card-organic bg-bg p-6 reveal">
+        <div class="flex gap-1 mb-3">⭐⭐⭐⭐</div>
+        <p class="font-sans text-green-800 text-sm italic leading-relaxed mb-4">"Een kwaliteit ei, uit een kwaliteit kippen houderij systeem."</p>
+        <span class="font-sans text-xs font-semibold text-primary">Andre Seijkens</span>
+      </div>
+      <div class="card-organic bg-primary p-6 reveal flex flex-col justify-center items-center text-center">
+        <span class="font-serif text-4xl font-bold text-white mb-2">4.9</span>
+        <div class="flex gap-1 mb-2">⭐⭐⭐⭐⭐</div>
+        <p class="font-sans text-green-100 text-sm">20+ Google Reviews</p>
+        <a href="https://maps.google.com/?cid=11314927609222248771" target="_blank" rel="noopener" class="mt-4 bg-white text-primary font-semibold px-4 py-2 rounded-organic-sm text-sm cursor-pointer hover:bg-green-50 transition-colors">
+          Bekijk alle reviews
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VIDEO GALERIJ ===== -->
+<section id="videos" class="py-20 px-4 sm:px-6 bg-bg">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-14 reveal">
+      <span class="font-sans text-sm font-semibold text-cta uppercase tracking-widest">Films & Video's</span>
+      <h2 class="font-serif text-3xl sm:text-4xl font-bold text-primary-dark mt-2">Kijk mee op de boerderij</h2>
+      <p class="font-sans text-green-700 mt-4 max-w-xl mx-auto">Abonneer op ons <a href="https://www.youtube.com/@bensboerdereitv6086" target="_blank" class="text-primary font-semibold hover:underline">YouTube kanaal</a> voor meer video's uit het dagelijks leven op Bens BoerderEi.</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-8">
+      <!-- Video 1 -->
+      <div class="reveal">
+        <div class="video-wrapper mb-3">
+          <iframe title="De pluimveehouder - Hugo Bens" 
+            src="https://www.youtube.com/embed/Hew-93fXRwM" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen loading="lazy">
+          </iframe>
+        </div>
+        <h3 class="font-serif font-semibold text-primary-dark">De pluimveehouder — Hugo Bens</h3>
+      </div>
+
+      <!-- Video 2 -->
+      <div class="reveal">
+        <div class="video-wrapper mb-3">
+          <iframe title="Ontdek de kracht van het ei!" 
+            src="https://www.youtube.com/embed/wE0EAVk6QSU" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen loading="lazy">
+          </iframe>
+        </div>
+        <h3 class="font-serif font-semibold text-primary-dark">Ontdek de kracht van het ei!</h3>
+      </div>
+
+      <!-- Video 3 — MP4 -->
+      <div class="reveal">
+        <div class="video-wrapper mb-3">
+          <video controls preload="metadata" style="border-radius:16px;">
+            <source src="images/eieren-voedselbank.mp4" type="video/mp4">
+            Uw browser ondersteunt geen video.
+          </video>
+        </div>
+        <h3 class="font-serif font-semibold text-primary-dark">Eieren voor de voedselbank</h3>
+      </div>
+
+      <!-- Video 4 — MOV via direct link -->
+      <div class="reveal">
+        <div class="video-wrapper mb-3">
+          <video controls preload="metadata" style="border-radius:16px;">
+            <source src="https://hetscharrelei.nl/wp-content/uploads/Eieren-van-stal-naar-pallet.mov" type="video/quicktime">
+            <source src="https://hetscharrelei.nl/wp-content/uploads/Eieren-van-stal-naar-pallet.mov" type="video/mp4">
+            Uw browser ondersteunt geen video.
+          </video>
+        </div>
+        <h3 class="font-serif font-semibold text-primary-dark">Van stal naar pallet</h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GALERIJ ===== -->
+<section id="galerij" class="py-20 px-4 sm:px-6 bg-white">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-10 reveal">
+      <span class="font-sans text-sm font-semibold text-cta uppercase tracking-widest">Galerij</span>
+      <h2 class="font-serif text-3xl font-bold text-primary-dark mt-2">Een kijkje in de stal</h2>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+      <img src="images/kip-1.png" alt="Scharrelkip in de stal" class="rounded-organic-sm object-cover w-full h-40 cursor-pointer hover:opacity-90 hover:scale-105 transition-all duration-200" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+      <img src="images/kip-2.png" alt="Scharrelkippen" class="rounded-organic-sm object-cover w-full h-40 cursor-pointer hover:opacity-90 hover:scale-105 transition-all duration-200" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+      <img src="images/kip-3.png" alt="Kippen in het volièresysteem" class="rounded-organic-sm object-cover w-full h-40 cursor-pointer hover:opacity-90 hover:scale-105 transition-all duration-200" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+      <img src="images/ei-1.png" alt="Vers scharrelei" class="rounded-organic-sm object-cover w-full h-40 cursor-pointer hover:opacity-90 hover:scale-105 transition-all duration-200" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+      <img src="images/ei-2.png" alt="Scharreleieren" class="rounded-organic-sm object-cover w-full h-40 cursor-pointer hover:opacity-90 hover:scale-105 transition-all duration-200" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+      <img src="images/daglicht-1.png" alt="Daglicht in de stal" class="rounded-organic-sm object-cover w-full h-40 cursor-pointer hover:opacity-90 hover:scale-105 transition-all duration-200" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+      <img src="images/daglicht-2.png" alt="Licht en ruimte voor de kippen" class="rounded-organic-sm object-cover w-full h-40 cursor-pointer hover:opacity-90 hover:scale-105 transition-all duration-200" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+      <img src="images/boerderij-eierlokaal.jpg" alt="Bens BoerderEi boerderij" class="rounded-organic-sm object-cover w-full h-40 cursor-pointer hover:opacity-90 hover:scale-105 transition-all duration-200" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+      <img src="images/educatie.png" alt="Boerderij educatie" class="rounded-organic-sm object-cover w-full h-40 cursor-pointer hover:opacity-90 hover:scale-105 transition-all duration-200" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+      <img src="images/ondernemersprijs.jpg" alt="Ondernemersprijs Bens BoerderEi" class="rounded-organic-sm object-cover w-full h-40 cursor-pointer hover:opacity-90 hover:scale-105 transition-all duration-200" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+      <img src="images/google/google_place_3.jpg" alt="Eierlokaal Bens BoerderEi" class="rounded-organic-sm object-cover w-full h-40 cursor-pointer hover:opacity-90 hover:scale-105 transition-all duration-200" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+      <img src="images/google/google_place_4.jpg" alt="Bens BoerderEi" class="rounded-organic-sm object-cover w-full h-40 cursor-pointer hover:opacity-90 hover:scale-105 transition-all duration-200" onclick="openLightbox(this.src, this.alt)" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- ===== EI-CODE SECTIE ===== -->
+<section class="py-16 px-4 sm:px-6 bg-bg">
+  <div class="max-w-4xl mx-auto text-center reveal">
+    <span class="font-sans text-sm font-semibold text-cta uppercase tracking-widest">Transparantie</span>
+    <h2 class="font-serif text-3xl font-bold text-primary-dark mt-2 mb-6">Volg jouw ei</h2>
+    <div class="card-organic bg-white p-8 inline-block mb-6">
+      <span class="font-serif text-4xl font-bold text-primary">2-NL-43587-02</span>
+      <p class="font-sans text-green-700 text-sm mt-2">Scharrelei · Nederland · Familie Bens · Stal 2</p>
+    </div>
+    <p class="font-sans text-green-700 leading-relaxed max-w-2xl mx-auto mb-6">
+      Op elk ei staat een stempel. De "2" betekent scharrelei, "NL" is Nederland, "43587" is de bedrijfscode van Familie Bens in Haps, en "02" is stal 2. Volledig traceerbaar.
+    </p>
+    <a href="https://www.volgmijnei.nl" target="_blank" rel="noopener" class="inline-block bg-primary hover:bg-primary-dark text-white font-semibold px-6 py-3 rounded-organic-sm transition-colors duration-200 cursor-pointer">
+      Volg mijn ei → volgmijnei.nl
+    </a>
+    <img src="images/eicode.jpg" alt="Ei-code uitleg" class="rounded-organic shadow-soft mt-8 max-w-sm mx-auto w-full" loading="lazy">
+  </div>
+</section>
+
+<!-- ===== CERTIFICERINGEN ===== -->
+<section class="py-12 px-4 sm:px-6 bg-white">
+  <div class="max-w-4xl mx-auto text-center reveal">
+    <h3 class="font-serif text-xl font-semibold text-primary-dark mb-8">Gecertificeerd kwaliteit</h3>
+    <div class="flex flex-wrap justify-center items-center gap-8">
+      <div class="flex flex-col items-center gap-2">
+        <div class="w-20 h-20 bg-green-50 rounded-organic flex items-center justify-center">
+          <span class="font-serif font-bold text-primary text-lg">IKB</span>
+        </div>
+        <span class="font-sans text-xs text-green-700">IKB-EI</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <div class="w-20 h-20 bg-blue-50 rounded-organic flex items-center justify-center">
+          <span class="font-serif font-bold text-blue-700 text-lg">KAT</span>
+        </div>
+        <span class="font-sans text-xs text-green-700">KAT</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <div class="w-20 h-20 bg-amber-50 rounded-organic flex items-center justify-center">
+          <span class="font-serif font-bold text-amber-700 text-lg">VLOG</span>
+        </div>
+        <span class="font-sans text-xs text-green-700">VLOG</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <div class="w-20 h-20 bg-green-50 rounded-organic flex items-center justify-center">
+          <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+          </svg>
+        </div>
+        <span class="font-sans text-xs text-green-700">Boerderij Educatie</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact" class="py-20 px-4 sm:px-6 bg-bg">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid lg:grid-cols-2 gap-12 items-start">
+      <!-- Contact info -->
+      <div class="reveal">
+        <span class="font-sans text-sm font-semibold text-cta uppercase tracking-widest">Contact</span>
+        <h2 class="font-serif text-3xl font-bold text-primary-dark mt-2 mb-8">Kom langs of neem contact op</h2>
+
+        <div class="space-y-6">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-serif font-semibold text-primary-dark">Adres</h3>
+              <p class="font-sans text-green-700 text-sm mt-1">Beerseweg 29A<br>5443 NL Haps, Noord-Brabant</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-serif font-semibold text-primary-dark">Telefoon</h3>
+              <a href="tel:0485578682" class="font-sans text-green-700 text-sm mt-1 hover:text-primary cursor-pointer">(0485) 578 682</a>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-serif font-semibold text-primary-dark">Email</h3>
+              <a href="mailto:info@hetscharrelei.nl" class="font-sans text-green-700 text-sm mt-1 hover:text-primary cursor-pointer">info@hetscharrelei.nl</a>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-red-500 rounded-2xl flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-serif font-semibold text-primary-dark">YouTube</h3>
+              <a href="https://www.youtube.com/@bensboerdereitv6086" target="_blank" rel="noopener" class="font-sans text-green-700 text-sm mt-1 hover:text-primary cursor-pointer">@bensboerdereitv6086</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contactformulier -->
+      <div class="card-organic bg-white p-8 reveal">
+        <h3 class="font-serif text-xl font-semibold text-primary-dark mb-6">Stuur een bericht</h3>
+        <form action="mailto:info@hetscharrelei.nl" method="get" enctype="text/plain" class="space-y-4">
+          <div>
+            <label class="font-sans text-sm font-semibold text-primary-dark block mb-1">Naam</label>
+            <input type="text" name="naam" placeholder="Uw naam" class="w-full border border-green-200 rounded-organic-sm px-4 py-3 font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors bg-bg">
+          </div>
+          <div>
+            <label class="font-sans text-sm font-semibold text-primary-dark block mb-1">Email</label>
+            <input type="email" name="email" placeholder="uw@email.nl" class="w-full border border-green-200 rounded-organic-sm px-4 py-3 font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors bg-bg">
+          </div>
+          <div>
+            <label class="font-sans text-sm font-semibold text-primary-dark block mb-1">Onderwerp</label>
+            <select name="onderwerp" class="w-full border border-green-200 rounded-organic-sm px-4 py-3 font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors bg-bg cursor-pointer">
+              <option>Vraag over eierenverkoop</option>
+              <option>Boerderij educatie</option>
+              <option>Samenwerking</option>
+              <option>Overig</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-sans text-sm font-semibold text-primary-dark block mb-1">Bericht</label>
+            <textarea name="bericht" rows="4" placeholder="Uw bericht..." class="w-full border border-green-200 rounded-organic-sm px-4 py-3 font-sans text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors bg-bg resize-none"></textarea>
+          </div>
+          <button type="submit" class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 rounded-organic-sm transition-colors duration-200 cursor-pointer font-sans">
+            Verstuur bericht
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Kaart -->
+    <div class="mt-12 rounded-organic overflow-hidden shadow-soft reveal">
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2468.0!2d5.8465!3d51.6931!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x9d0b0c4b0e0a0000!2sBens+BoerderEi!5e0!3m2!1snl!2snl!4v1614000000000!5m2!1snl!2snl"
+        width="100%" height="350" style="border:0; display:block;" allowfullscreen loading="lazy" 
+        title="Locatie Bens BoerderEi Haps">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="bg-primary-dark text-white py-12 px-4 sm:px-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+      <div>
+        <h4 class="font-serif font-bold text-lg mb-4">Bens BoerderEi</h4>
+        <p class="font-sans text-green-200 text-sm leading-relaxed">Verse scharreleieren rechtstreeks van de boer in Haps, Noord-Brabant.</p>
+        <p class="font-sans text-green-300 text-xs mt-3">⭐ 4.9/5 · 20+ reviews</p>
+      </div>
+      <div>
+        <h4 class="font-serif font-semibold mb-4">De boerderij</h4>
+        <ul class="space-y-2 font-sans text-sm text-green-200">
+          <li><a href="#boerderij" class="hover:text-white transition-colors cursor-pointer">Over de boerderij</a></li>
+          <li><a href="#eierlokaal" class="hover:text-white transition-colors cursor-pointer">Eierlokaal</a></li>
+          <li><a href="#duurzaamheid" class="hover:text-white transition-colors cursor-pointer">Duurzaamheid</a></li>
+          <li><a href="#galerij" class="hover:text-white transition-colors cursor-pointer">Galerij</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-serif font-semibold mb-4">Informatie</h4>
+        <ul class="space-y-2 font-sans text-sm text-green-200">
+          <li><a href="#videos" class="hover:text-white transition-colors cursor-pointer">Films</a></li>
+          <li><a href="https://www.volgmijnei.nl" target="_blank" rel="noopener" class="hover:text-white transition-colors cursor-pointer">Volg mijn ei</a></li>
+          <li><a href="#contact" class="hover:text-white transition-colors cursor-pointer">Contact</a></li>
+          <li><a href="https://hetscharrelei.nl/privacy-beleid/" target="_blank" rel="noopener" class="hover:text-white transition-colors cursor-pointer">Privacy beleid</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-serif font-semibold mb-4">Contact</h4>
+        <ul class="space-y-2 font-sans text-sm text-green-200">
+          <li>Beerseweg 29A, 5443 NL Haps</li>
+          <li><a href="tel:0485578682" class="hover:text-white cursor-pointer">(0485) 578 682</a></li>
+          <li><a href="mailto:info@hetscharrelei.nl" class="hover:text-white cursor-pointer">info@hetscharrelei.nl</a></li>
+          <li><a href="https://www.youtube.com/@bensboerdereitv6086" target="_blank" rel="noopener" class="hover:text-white cursor-pointer">YouTube</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-green-800 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p class="font-sans text-green-300 text-xs">© 2013 t/m 2026 Het Scharrelei — Bens BoerderEi</p>
+      <p class="font-sans text-green-400 text-xs">Gebouwd door <a href="https://www.code-lieshout.nl" target="_blank" rel="noopener" class="text-green-300 hover:text-white cursor-pointer">Code Lieshout</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== LIGHTBOX ===== -->
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Foto weergave" onclick="closeLightbox()">
+  <button id="lightbox-close" onclick="closeLightbox()" aria-label="Sluiten">✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+  // Hamburger menu
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+  });
+  // Close mobile menu on link click
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  });
+
+  // Lightbox
+  function openLightbox(src, alt) {
+    const lb = document.getElementById('lightbox');
+    const img = document.getElementById('lightbox-img');
+    img.src = src;
+    img.alt = alt || '';
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
